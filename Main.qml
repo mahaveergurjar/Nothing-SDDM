@@ -24,11 +24,10 @@ Rectangle {
         id: clock
         font.pixelSize: 100
         font.family: pixelFont.name
-        font.bold: true
         color: "white"
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 80
+        anchors.topMargin: 150
     }
 
     Timer {
@@ -53,7 +52,7 @@ Rectangle {
         border.width: 4
         anchors.top: clock.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 50
+        anchors.topMargin: 100
 
         Image {
             id: avatar
@@ -76,10 +75,9 @@ Rectangle {
 
     Text {
         id: welcome
-        text: "Welcome " + (userModel.lastUser || "User")
-        font.pixelSize: 50
+        text: "welcome " + (userModel.lastUser || "User")
+        font.pixelSize: 40
         font.family: pixelFont.name
-        font.bold: true
         color: "white"
         anchors.top: avatarContainer.bottom
         anchors.horizontalCenter: parent.horizontalCenter
@@ -91,15 +89,15 @@ Rectangle {
         anchors.top: welcome.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 50
-        spacing: 60
+        spacing: 20
 
         Rectangle {
-            width: 400
-            height: 70
-            color: "transparent"
+            width: 300
+            height: 50
+            color: "#aa3333"
             border.color: "#aa3333"
             border.width: 3
-            radius: 15
+            radius: 25
             TextField {
                 id: username
                 placeholderText: "Username"
@@ -118,12 +116,12 @@ Rectangle {
         }
 
         Rectangle {
-            width: 400
-            height: 70
-            color: "transparent"
+            width: 300
+            height: 50
+            color: "#aa3333"
             border.color: "#aa3333"
             border.width: 3
-            radius: 15
+            radius: 25
             TextField {
                 id: password
                 placeholderText: "Password"
@@ -157,7 +155,7 @@ Rectangle {
 
    ComboBox {
         id: sessionSelector
-        width: 400
+        width: 300
         height: 50
         font.pixelSize: 26
         font.family: pixelFont.name
@@ -173,12 +171,12 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             color: "white"
             radius: 100
-            width: 80
-            height: 80
+            width: 60
+            height: 60
             Text {
                 text: "⠶>"
                 color: "#aa3333"
-                font.pixelSize: 40
+                font.pixelSize: 30
                 font.family: pixelFont.name
                 anchors.centerIn: parent
             }
