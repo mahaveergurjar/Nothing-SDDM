@@ -61,22 +61,22 @@ Rectangle {
             height: parent.height - 20
             source: "user.jpg"  // Auto-load user avatar
             visible: true
+            fillMode: Image.PreserveAspectCrop
             layer.enabled: true
             layer.effect: OpacityMask {
-            maskSource: Rectangle {
-                width: avatar.width
-                height: avatar.height
-                radius: 25 // Make the mask circular
-                visible: false // Hide the mask itself
-            }
+                maskSource: Rectangle {
+                    width: avatar.width
+                    height: avatar.height
+                    radius: 25 // Make the mask circular
+                    visible: false
+                }
             }
         }
-
     }
 
     Text {
         id: welcome
-        text: "WELCOME " + (userModel.lastUser || "USER")  // Auto-load username
+        text: "Welcome " + (userModel.lastUser || "User")
         font.pixelSize: 50
         font.family: pixelFont.name
         font.bold: true
@@ -103,7 +103,7 @@ Rectangle {
             TextField {
                 id: username
                 placeholderText: "Username"
-                text: userModel.lastUser || ""  // Auto-fill username field
+                text: userModel.lastUser || ""
                 width: parent.width - 20
                 font.pixelSize: 26
                 font.family: pixelFont.name
@@ -112,13 +112,8 @@ Rectangle {
                 anchors.centerIn: parent
                 leftPadding: 15
 
-                // Handle Enter key press
-                Keys.onReturnPressed: {
-                    login();
-                }
-                Keys.onEnterPressed: {
-                    login();
-                }
+                Keys.onReturnPressed: login()
+                Keys.onEnterPressed: login()
             }
         }
 
@@ -141,19 +136,13 @@ Rectangle {
                 anchors.centerIn: parent
                 leftPadding: 15
 
-                // Handle Enter key press
-                Keys.onReturnPressed: {
-                    login();
-                }
-                Keys.onEnterPressed: {
-                    login();
-                }
+                Keys.onReturnPressed: login()
+                Keys.onEnterPressed: login()
             }
         }
     }
 
-    property string defaultSession: "hyprland.desktop" // Fallback session
-    property string selectedSession: sessionSelector.currentText || defaultSession
+    property int sessionIndex: sessionSelector.currentIndex
 
     Connections {
         target: sddm
@@ -162,29 +151,37 @@ Rectangle {
         }
         function onLoginFailed() {
             console.log("Login failed.");
-            password.text = ""; // Clear the password field on failure
+            password.text = "";
         }
     }
 
-    ComboBox {
+   ComboBox {
         id: sessionSelector
         width: 400
         height: 50
         font.pixelSize: 26
         font.family: pixelFont.name
         model: sessionModel
-        textRole: "name" // Display the session name
-        currentIndex: sessionModel.lastIndex
+        currentIndex: model.lastIndex
+        
         anchors.top: loginForm.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 20
 
         // Style the ComboBox
-        background: Rectangle {
-            color: "transparent"
-            border.color: "#aa3333"
-            border.width: 3
-            radius: 15
+          background: Rectangle {
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: "white"
+            radius: 100
+            width: 80
+            height: 80
+            Text {
+                text: "⠶>"
+                color: "#aa3333"
+                font.pixelSize: 40
+                font.family: pixelFont.name
+                anchors.centerIn: parent
+            }
         }
 
         contentItem: Text {
@@ -217,10 +214,11 @@ Rectangle {
                 border.width: 3
                 radius: 15
             }
+            
         }
 
         delegate: ItemDelegate {
-            width: sessionSelector.width
+            width: 800
             height: 50
             contentItem: Text {
                 text: model.name
@@ -235,48 +233,15 @@ Rectangle {
                 radius: 15
             }
         }
-    }
 
-    Button {
-        id: loginButton
-        width: 80
-        height: 80
-        background: Rectangle {
-            color: "white"
-            radius: 55
-        }
-        contentItem: Text {
-            text: "⠶>"
-            font.pixelSize: 40
-            color: "#aa3333"
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-        }
-        anchors.top: sessionSelector.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 20
-
-        onClicked: {
-            login();
+        indicator {
+            visible: false
         }
     }
 
-    // Function to handle login logic
+
     function login() {
-        selectedSession = sessionSelector.currentText || defaultSession;
-        console.log("Login attempt:", username.text, password.text, selectedSession);
-
-        if (username.text.length === 0 || password.text.length === 0) {
-            console.log("Username or password is empty.");
-            return;
-        }
-
-        if (!selectedSession || selectedSession.length === 0) {
-            console.log("Selected session is invalid. Using fallback:", defaultSession);
-            selectedSession = defaultSession;
-        }
-
-        console.log("Starting session:", selectedSession);
-        sddm.login(username.text, password.text, selectedSession);
+        console.log("Starting session:", sessionIndex);
+        sddm.login(username.text, password.text, sessionIndex);
     }
 }
