@@ -22,7 +22,7 @@ Void UI SDDM is a sleek, minimalist login theme for **SDDM (Simple Desktop Displ
    ```
 3. Edit the SDDM configuration to use the theme:
    ```sh
-   sudo nano /etc/sddm.conf.d/10-theme.conf
+   sudo nano /etc/sddm.conf
    ```
    Add or modify the following:
    ```ini
@@ -34,21 +34,11 @@ Void UI SDDM is a sleek, minimalist login theme for **SDDM (Simple Desktop Displ
    sudo systemctl restart sddm
    ```
 
-## Configuration
-You can further customize Void UI SDDM by modifying the **theme.conf** file:
-```sh
-sudo nano /usr/share/sddm/themes/Nothing-SDDM/theme.conf
-```
-Options include font size, animations, layout, and custom branding.
-
 ## Preview
 If you want to test the theme without restarting SDDM, run:
 ```sh
 sddm-greeter --test-mode --theme /usr/share/sddm/themes/Nothing-SDDM
 ```
-
-## License
-This theme is open-source and licensed under the **MIT License**.
 
 ## Credits
 - Inspired by **Nothing OS UI**.
