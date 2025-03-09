@@ -1,12 +1,15 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.12
+import QtQuick.Window 2.15
 
 Rectangle {
     id: root
-    width: 1920
-    height: 1080
+    width: Screen.width
+    height: Screen.height
     color: "black"
+
+    property real scaleFactor: Math.min(width / 1920, height / 1080)
 
     FontLoader {
         id: pixelFont
@@ -22,12 +25,12 @@ Rectangle {
 
     Text {
         id: clock
-        font.pixelSize: 100
+        font.pixelSize: 100 * scaleFactor
         font.family: pixelFont.name
         color: "white"
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 150
+        anchors.topMargin: 150 * scaleFactor
     }
 
     Timer {
@@ -44,20 +47,20 @@ Rectangle {
 
     Rectangle {
         id: avatarContainer
-        width: 250
-        height: 250
-        radius: 50
+        width: 250 * scaleFactor
+        height: 250 * scaleFactor
+        radius: 50 * scaleFactor
         color: "transparent"
         border.color: "#aa3333"
-        border.width: 4
+        border.width: 4 * scaleFactor
         anchors.top: clock.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 100
+        anchors.topMargin: 100 * scaleFactor
 
         Image {
             id: avatar
-            width: parent.width - 20
-            height: parent.height - 20
+            width: parent.width - 20 * scaleFactor
+            height: parent.height - 20 * scaleFactor
             source: "user.jpg"  // Auto-load user avatar
             visible: true
             fillMode: Image.PreserveAspectCrop
@@ -66,7 +69,7 @@ Rectangle {
                 maskSource: Rectangle {
                     width: avatar.width
                     height: avatar.height
-                    radius: 25 // Make the mask circular
+                    radius: 25 * scaleFactor // Make the mask circular
                     visible: false
                 }
             }
@@ -76,64 +79,71 @@ Rectangle {
     Text {
         id: welcome
         text: "welcome " + (userModel.lastUser || "User")
-        font.pixelSize: 40
+        font.pixelSize: 40 * scaleFactor
         font.family: pixelFont.name
         color: "white"
         anchors.top: avatarContainer.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 50
+        anchors.topMargin: 50 * scaleFactor
     }
 
     Column {
         id: loginForm
         anchors.top: welcome.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 50
-        spacing: 20
+        anchors.topMargin: 50 * scaleFactor
+        spacing: 20 * scaleFactor
 
         Rectangle {
-            width: 300
-            height: 50
+            width: 300 * scaleFactor
+            height: 50 * scaleFactor
             color: "#aa3333"
             border.color: "#aa3333"
-            border.width: 3
-            radius: 25
+            border.width: 3 * scaleFactor
+            radius: 25 * scaleFactor
             TextField {
                 id: username
                 placeholderText: "Username"
                 text: userModel.lastUser || ""
-                width: parent.width - 20
-                font.pixelSize: 26
+                width: parent.width - 20 * scaleFactor
+                font.pixelSize: 26 * scaleFactor
                 font.family: pixelFont.name
                 color: "white"
                 background: Rectangle { color: "transparent" }
                 anchors.centerIn: parent
-                leftPadding: 15
+                leftPadding: 15 * scaleFactor
 
-                Keys.onReturnPressed: login()
-                Keys.onEnterPressed: login()
+                // Auto-focus on password field when Enter/Return is pressed
+                Keys.onReturnPressed: {
+                    password.focus = true; // Focus on password field
+                }
+                Keys.onEnterPressed: {
+                    password.focus = true; // Focus on password field
+                }
             }
         }
 
         Rectangle {
-            width: 300
-            height: 50
+            width: 300 * scaleFactor
+            height: 50 * scaleFactor
             color: "#aa3333"
             border.color: "#aa3333"
-            border.width: 3
-            radius: 25
+            border.width: 3 * scaleFactor
+            radius: 25 * scaleFactor
             TextField {
                 id: password
                 placeholderText: "Password"
                 echoMode: TextInput.Password
-                width: parent.width - 20
-                font.pixelSize: 26
+                width: parent.width - 20 * scaleFactor
+                font.pixelSize: 26 * scaleFactor
                 font.family: pixelFont.name
                 color: "white"
                 background: Rectangle { color: "transparent" }
                 anchors.centerIn: parent
-                leftPadding: 15
+                leftPadding: 15 * scaleFactor
+                focus: true // Automatically focus on the password field when the screen loads
 
+                // Trigger login when Enter/Return is pressed in the password field
                 Keys.onReturnPressed: login()
                 Keys.onEnterPressed: login()
             }
@@ -155,28 +165,28 @@ Rectangle {
 
    ComboBox {
         id: sessionSelector
-        width: 300
-        height: 50
-        font.pixelSize: 26
+        width: 300 * scaleFactor
+        height: 50 * scaleFactor
+        font.pixelSize: 26 * scaleFactor
         font.family: pixelFont.name
         model: sessionModel
         currentIndex: model.lastIndex
         
         anchors.top: loginForm.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 20
+        anchors.topMargin: 20 * scaleFactor
 
         // Style the ComboBox
           background: Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             color: "white"
-            radius: 100
-            width: 60
-            height: 60
+            radius: 100 * scaleFactor
+            width: 60 * scaleFactor
+            height: 60 * scaleFactor
             Text {
                 text: "⠶>"
                 color: "#aa3333"
-                font.pixelSize: 30
+                font.pixelSize: 30 * scaleFactor
                 font.family: pixelFont.name
                 anchors.centerIn: parent
             }
@@ -188,7 +198,7 @@ Rectangle {
             color: "white"
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
-            leftPadding: 15
+            leftPadding: 15 * scaleFactor
         }
 
         popup: Popup {
@@ -209,26 +219,26 @@ Rectangle {
             background: Rectangle {
                 color: "black"
                 border.color: "#aa3333"
-                border.width: 3
-                radius: 15
+                border.width: 3 * scaleFactor
+                radius: 15 * scaleFactor
             }
             
         }
 
         delegate: ItemDelegate {
-            width: 800
-            height: 50
+            width: 800 * scaleFactor
+            height: 50 * scaleFactor
             contentItem: Text {
                 text: model.name
                 font: sessionSelector.font
                 color: "white"
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
-                leftPadding: 15
+                leftPadding: 15 * scaleFactor
             }
             background: Rectangle {
                 color: parent.highlighted ? "#aa3333" : "transparent"
-                radius: 15
+                radius: 15 * scaleFactor
             }
         }
 
@@ -236,7 +246,6 @@ Rectangle {
             visible: false
         }
     }
-
 
     function login() {
         console.log("Starting session:", sessionIndex);
