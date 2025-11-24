@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=ii-lock
+Comment=Quickshell lock inspired SDDM login screen
+Type=Service
+X-KDE-PluginInfo-Author=Mahaveer
+X-KDE-PluginInfo-Email=
+X-KDE-PluginInfo-Name=ii-lock
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-Website=https://github.com/quickshell-mirror
+X-KDE-PluginInfo-Category=Plasma Look And Feel
+X-KDE-ServiceTypes=SDDM/Theme
