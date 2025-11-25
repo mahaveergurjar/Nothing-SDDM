@@ -14,11 +14,11 @@ Void UI SDDM is a sleek, minimalist login theme for **SDDM (Simple Desktop Displ
 ## Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/mahaveergurjar/sddm.git
+   git clone -b nothing https://github.com/mahaveergurjar/sddm.git
    ```
 2. Move the theme to SDDM's theme directory:
    ```sh
-   sudo mv Nothing-SDDM /usr/share/sddm/themes/
+   sudo mv sddm /usr/share/sddm/themes/
    ```
 3. Edit the SDDM configuration to use the theme:
    ```sh
