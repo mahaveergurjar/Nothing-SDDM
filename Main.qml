@@ -14,6 +14,8 @@ Item {
     // --- SESSION STATE MANAGEMENT ---
     property int currentSessionIndex: 0
     property bool sessionOpen: false
+    // New property for keyboard state
+    property bool keyboardOpen: false 
     
     property alias password: passwordBox.text
 
@@ -117,23 +119,56 @@ Item {
         z: 0
     }
 
-    Rectangle {
-        anchors.fill: parent
-        color: baseColor
-        opacity: 0.78
-        z: 0
+
+    // --- VIRTUAL KEYBOARD INTEGRATION ---
+    VirtualKeyboard {
+        id: virtualKeyboard
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: 10
+        height: root.height * 0.35 // Take up 35% of screen height
+        z: 100 // Ensure it's on top
+        
+        visible: root.keyboardOpen
+        
+        // Pass theme colors
+        btnColor: "#3b2513"
+        textColor: root.textColor
+        activeColor: root.accentColor
+        
+        onKeyClicked: {
+            passwordBox.text += key
+            passwordBox.forceActiveFocus()
+        }
+        
+        onBackspaceClicked: {
+            if (passwordBox.text.length > 0) {
+                passwordBox.text = passwordBox.text.substring(0, passwordBox.text.length - 1)
+            }
+            passwordBox.forceActiveFocus()
+        }
+        
+        onEnterClicked: {
+            attemptLogin()
+        }
     }
 
     Column {
         id: centerColumn
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
+        // Animate up when keyboard is open
+        anchors.verticalCenterOffset: root.keyboardOpen ? -150 : 0
+        
+        Behavior on anchors.verticalCenterOffset { NumberAnimation { duration: 200; easing.type: Easing.OutQuad } }
+
         spacing: 12
         z: 1
 
         AnalogBadge {
             id: analogBadge
-            width: root.height > root.width ? root.width * 0.22 : root.height * 0.22
+            width: root.height > root.width ? root.width * 0.25 : root.height * 0.25
             height: width
             accent: accentColor
             surface: surfaceColor
@@ -152,12 +187,7 @@ Item {
                 anchors.centerIn: parent
                 spacing: 6
                 Text {
-                    text: "\uD83D\uDD12" // Lock emoji
-                    color: textColor
-                    font.pixelSize: 16
-                }
-                Text {
-                    text: qsTr("Locked")
+                    text: "  Locked"
                     color: textColor
                     font.pixelSize: 16
                 }
@@ -202,7 +232,11 @@ Item {
         id: toolbar
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 64
+        // Animate up when keyboard is open
+        anchors.bottomMargin: root.keyboardOpen ? root.height * 0.35 + 20 : 64
+        
+        Behavior on anchors.bottomMargin { NumberAnimation { duration: 200; easing.type: Easing.OutQuad } }
+
         spacing: 18
         z: 2
 
@@ -231,7 +265,7 @@ Item {
                 Text {
                     text: "\uF2BD"
                     font.family: "Noto Sans"
-                    font.pixelSize: 24
+                    font.pixelSize: 34
                     color: "#cccccc"
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -269,7 +303,7 @@ Item {
                 Text {
                     text: "\uF108"
                     font.family: "Noto Sans"
-                    font.pixelSize: 22
+                    font.pixelSize: 34
                     color: "#cccccc"
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -453,10 +487,10 @@ Item {
             }
         }
 
-        // --- RIGHT PILL: POWER & BATTERY ---
+        // --- RIGHT PILL: POWER, BATTERY & KEYBOARD ---
         Rectangle {
             height: 64
-            width: toolbar.pill(240)
+            width: toolbar.pill(280) // Increased width for Keyboard Toggle
             radius: height / 2
             color: surfaceColor
             opacity: 0.96
@@ -464,83 +498,71 @@ Item {
             border.width: 1
             
             RowLayout {
-                anchors.fill: parent
+                anchors.centerIn: parent
                 anchors.leftMargin: 24
                 anchors.rightMargin: 24
-                spacing: 16
+                spacing: 36
                 Layout.alignment: Qt.AlignVCenter
 
-                RowLayout {
-                    spacing: 8
+
+                // KEYBOARD TOGGLE BUTTON
+                MouseArea {
+                    width: 24
+                    height: 24
+                    onClicked: root.keyboardOpen = !root.keyboardOpen
+                    cursorShape: Qt.PointingHandCursor
+                    
                     Text {
-                        text: "\uF242"
-                        font.family: "Noto Sans"
+                        anchors.centerIn: parent
+                        text: "⌨" // Keyboard Unicode Icon
+                        font.pixelSize: 24
+                        color: root.keyboardOpen ? accentColor : "#cccccc"
+                    }
+                }
+
+                MouseArea {
+                    width: 24
+                    height: 24
+                    enabled: sddm.canSuspend
+                    opacity: enabled ? 1 : 0.3
+                    onClicked: sddm.suspend()
+                    cursorShape: Qt.PointingHandCursor
+                    Text {
+                        anchors.centerIn: parent
+                        text: "☾" 
+                        font.pixelSize: 34
                         color: "#cccccc"
-                        font.pixelSize: 22 
                     }
+                }
+
+                MouseArea {
+                    width: 24
+                    height: 24
+                    onClicked: sddm.powerOff()
+                    cursorShape: Qt.PointingHandCursor
                     Text {
-                        text: "80" 
-                        color: textColor
-                        font.pixelSize: 16
+                        anchors.centerIn: parent
+                        text: "⏻" 
+                        font.pixelSize: 34
+                        color: "#cccccc"
                     }
                 }
 
-                Item { Layout.fillWidth: true }
-
-                RowLayout {
-                    spacing: 20
-                    MouseArea {
-                        width: 24
-                        height: 24
-                        enabled: sddm.canSuspend
-                        opacity: enabled ? 1 : 0.3
-                        onClicked: sddm.suspend()
-                        cursorShape: Qt.PointingHandCursor
-                        Text {
-                            anchors.centerIn: parent
-                            text: "☾" 
-                            font.pixelSize: 24
-                            color: "#cccccc"
-                        }
-                    }
-
-                    MouseArea {
-                        width: 24
-                        height: 24
-                        onClicked: sddm.powerOff()
-                        cursorShape: Qt.PointingHandCursor
-                        Text {
-                            anchors.centerIn: parent
-                            text: "⏻" 
-                            font.pixelSize: 24
-                            color: "#cccccc"
-                        }
-                    }
-
-                    MouseArea {
-                        width: 24
-                        height: 24
-                        onClicked: sddm.reboot()
-                        cursorShape: Qt.PointingHandCursor
-                        Text {
-                            anchors.centerIn: parent
-                            text: "⭮" 
-                            font.pixelSize: 24
-                            color: "#cccccc"
-                        }
+                MouseArea {
+                    width: 24
+                    height: 24
+                    onClicked: sddm.reboot()
+                    cursorShape: Qt.PointingHandCursor
+                    Text {
+                        anchors.centerIn: parent
+                        text: "⟲" 
+                        font.pixelSize: 34
+                        color: "#cccccc"
                     }
                 }
+
             }
         }
     }
 
-    Row {
-        id: metaRow
-        anchors.horizontalCenter: toolbar.horizontalCenter
-        anchors.bottom: toolbar.top
-        anchors.bottomMargin: 12
-        spacing: 12
-        opacity: 0.8
-
-    }
 }
