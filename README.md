@@ -3,6 +3,7 @@
 Void UI SDDM is a sleek, minimalist login theme for **SDDM (Simple Desktop Display Manager)**, inspired by **Pixel OS UI**. It features a monochrome aesthetic, dot-matrix elements, and a clean, futuristic design tailored for Hyprland and KDE users.
 
 ![Pixel UI SDDM Preview](image.png)
+![Pixel UI SDDM Preview](image2.png)
 
 ## Features
 
@@ -52,4 +53,5 @@ sddm-greeter --test-mode --theme /usr/share/sddm/themes/sddm
 ---
 
 **Contributions are welcome!** Feel free to fork and improve the theme.
+
 
