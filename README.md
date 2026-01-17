@@ -12,13 +12,30 @@ Noctalia SDDM is a cozy, elegant login theme for **SDDM (Simple Desktop Display 
 - **Session Management** – Built-in support for switching desktop sessions (Wayland/X11).
 - **Integrated Power Controls** – Suspend, Reboot, and Shutdown accessible directly from the login screen.
 - **Customizable Configuration** – easy tweaks via `theme.conf`.
+- **Noctalia Shell integration** - synchronize theme colors with Nocatalia shell via user templates.
 
-## Installation
+## Auto Installer
+
+### 1. Clone repository
+
+```sh
+git clone -b noctalia https://github.com/mahaveergurjar/sddm.git noctalia && cd noctalia
+```
+
+### 2. Run install script
+
+```sh
+sudo ./install.sh
+```
+
+The install script will ask if you want the optional color sync integration with Noctalia Shell.
+
+## Manual installation
 
 ### 1. Clone the repository
 
 ```sh
-git clone -b noctalia https://github.com/mahaveergurjar/sddm.git
+git clone -b noctalia https://github.com/mahaveergurjar/sddm.git noctalia
 ```
 
 ### 2. Install the theme
@@ -26,7 +43,7 @@ git clone -b noctalia https://github.com/mahaveergurjar/sddm.git
 Move the theme folder to the SDDM themes directory:
 
 ```sh
-sudo cp -r sddm /usr/share/sddm/themes/
+sudo cp -r noctalia /usr/share/sddm/themes/
 ```
 
 ### 3. Configure SDDM
@@ -41,7 +58,7 @@ Add or modify the `[Theme]` section:
 
 ```ini
 [Theme]
-Current=sddm
+Current=noctalia
 ```
 
 ### 4. Restart SDDM
@@ -52,9 +69,28 @@ To apply the changes, restart the display manager:
 sudo systemctl restart sddm
 ```
 
+### 5. Noctalia Shell integration (optional)
+
+Open `~/.config/noctalia/user-templates.toml` and add the following lines at the Suspend
+
+```sh
+# SDDM GREETER
+[templates.sddm]
+input_path = "/usr/share/sddm/themes/noctalia/theme.template.conf"
+output_path = "/usr/share/sddm/themes/noctalia/theme.conf"
+```
+
 ## Configuration
 
-You can customize colors, background, and blur settings in `theme.conf`:
+### 1. General
+
+You can customize colors, background, and blur settings in :
+
+- `theme.conf` - if you **are not** using Noctalia Shell integration
+- `theme.template.conf` - if you **are** using Noctalia Shell integration
+
+> [!IMPORTANT]
+> If using the Noctalia Shell integration do not modify the color variables inside `theme.template.conf`
 
 ```ini
 [General]
@@ -63,12 +99,19 @@ blurRadius=0
 # Rose Pine Color Palette overrides...
 ```
 
+### 2. Noctalia Shell integration
+
+- Enable user templates inside Noctalia Shell
+  `Control Center > Settings > Color Schemes > Templates > Advanced > Enable user teplates`
+
+- Change your Color Scheme inside Noctalia settings at least once so that the theme gets synced.
+
 ## Preview
 
-You can test the theme without logging out by running the sddm-greeter in test mode:
+You can test the theme without logging out by running the test script
 
 ```sh
-sddm-greeter --test-mode --theme /usr/share/sddm/themes/sddm
+./test.sh
 ```
 
 _Note: Ensure you have `qt5-graphicaleffects` and `qt5-quickcontrols2` (or their Qt6 equivalents) installed._
