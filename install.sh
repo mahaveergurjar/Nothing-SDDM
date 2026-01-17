@@ -6,12 +6,6 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-# Exit if sddm-greeter not installed
-if ! command -v sddm-greeter >/dev/null 2>&1; then
-  echo "Error: sdd-greeter is not installed." >&2
-  return 1 # exit the function with error
-fi
-
 SWD="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 THEME_NAME="noctalia"
@@ -20,7 +14,20 @@ SDDM_DIR="/usr/share/sddm"
 DEST_DIR="$SDDM_DIR/themes/$THEME_NAME"
 SDDM_CONF="/etc/sddm.conf"
 
+# Exit if sddm-greeter not installed
+if ! command -v sddm-greeter >/dev/null 2>&1; then
+  echo "Error: sdd-greeter is not installed." >&2
+  return 1 # exit the function with error
+fi
+
 install_theme() {
+
+  # Exit if theme already installed
+  if [ -d $DEST_DIR ]; then
+    echo "Error: Theme is already installed!" >&2
+    exit 1
+  fi
+
   # Create theme dir
   mkdir -p $DEST_DIR
 
@@ -30,10 +37,11 @@ install_theme() {
   cp "$SWD/metadata.desktop" $DEST_DIR
   cp "$SWD/theme.conf" $DEST_DIR
   cp "$SWD/theme.template.conf" $DEST_DIR
+  cp "$SWD/uninstall.sh" $DEST_DIR
   # permission needed for noctalia updates
   # via user templates
   chmod 666 "$DEST_DIR/theme.conf"
-  echo "SDDM theme installed!"
+  echo "Noctalia theme installed!"
   activate_theme
 }
 
@@ -41,26 +49,36 @@ install_theme() {
 # UPDATE [Theme] sddm.conf
 #--------------------------------------------
 activate_theme() {
+  # create sddm.conf if missing
   if [ ! -f "$SDDM_CONF" ]; then
-    echo "Error: $SDDM_CONF not found"
-    exit 1
+    printf "[Theme]\nCurrent=%s\n$THEME_NAME" >"$SDDM_CONF"
   fi
 
   # Create a backup of the config
   cp $SDDM_CONF "$SDDM_CONF.bak"
 
-  # Modify [Theme.Current] field
+  # ADD / MODIFY [Theme.Current] field
   awk -v new_value="$THEME_NAME" '
   BEGIN {
     in_theme = 0
     current_found = 0
+    theme_found = 0
   }
 
   /^\[.*\]/ {
+    # Leaving [Theme]
     if (in_theme && !current_found) {
         print "Current=" new_value
     }
-    in_theme = ($0 == "[Theme]")
+
+    if ($0 == "[Theme]") {
+        in_theme = 1
+        theme_found = 1
+        current_found = 0
+    } else {
+        in_theme = 0
+    }
+
     print
     next
   }
@@ -79,10 +97,17 @@ activate_theme() {
     if (in_theme && !current_found) {
         print "Current=" new_value
     }
+
+    # [Theme] never existed → add it
+    if (!theme_found) {
+        print ""
+        print "[Theme]"
+        print "Current=" new_value
+    }
   }
 ' "$SDDM_CONF" >"$SDDM_CONF.tmp" && mv "$SDDM_CONF.tmp" "$SDDM_CONF"
 
-  echo "SDDM theme activated!"
+  echo "Noctalia theme activated!"
   read -p "Do you want to install Noctalia integration via user templates? [y/N]" answer
   answer=${answer,,}
 
@@ -110,7 +135,7 @@ add_user_template() {
     }
   ' "$USER_TEMPLATE" >"$USER_TEMPLATE.tmp" && mv "$USER_TEMPLATE.tmp" "$USER_TEMPLATE"
 
-  # change owner of user-templates.toml back to user
+  # change ownership of user-templates.toml back to user
   chown $SUDO_USER $USER_TEMPLATE
   echo "Updated: $USER_TEMPLATE"
 }
