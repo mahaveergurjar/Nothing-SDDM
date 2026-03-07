@@ -9,3 +9,4 @@ X-KDE-PluginInfo-Version=1.0
 X-KDE-PluginInfo-Website=https://github.com/quickshell-mirror
 X-KDE-PluginInfo-Category=Plasma Look And Feel
 X-KDE-ServiceTypes=SDDM/Theme
+QtVersion=6
