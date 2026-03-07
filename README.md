@@ -42,8 +42,10 @@ Void UI SDDM is a sleek, minimalist login theme for **SDDM (Simple Desktop Displ
 If you want to test the theme without restarting SDDM, run:
 
 ```sh
-sddm-greeter --test-mode --theme /usr/share/sddm/themes/sddm
+sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/sddm
 ```
+
+_Note: If you run into "module is not installed" errors, ensure you are using `sddm-greeter-qt6` and have `qt6-5compat` and `qt6-declarative` installed._
 
 ## Credits
 
@@ -53,5 +55,3 @@ sddm-greeter --test-mode --theme /usr/share/sddm/themes/sddm
 ---
 
 **Contributions are welcome!** Feel free to fork and improve the theme.
-
-
