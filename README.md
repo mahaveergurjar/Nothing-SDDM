@@ -5,6 +5,7 @@ Void UI SDDM is a sleek, minimalist login theme for **SDDM (Simple Desktop Displ
 ![Void UI SDDM Preview](image.png)
 
 ## Features
+
 - **Minimalist Design** – Inspired by Nothing OS UI.
 - **Modular QML Components** – Structured for easy customization.
 - **Dark and Light Modes** – Seamless adaptation to different setups.
@@ -12,6 +13,7 @@ Void UI SDDM is a sleek, minimalist login theme for **SDDM (Simple Desktop Displ
 - **Custom Font Support** – Uses a dot-matrix-inspired typeface.
 
 ## Installation
+
 1. Clone the repository:
    ```sh
    git clone -b nothing https://github.com/mahaveergurjar/sddm.git
@@ -35,14 +37,20 @@ Void UI SDDM is a sleek, minimalist login theme for **SDDM (Simple Desktop Displ
    ```
 
 ## Preview
+
 If you want to test the theme without restarting SDDM, run:
+
 ```sh
-sddm-greeter --test-mode --theme /usr/share/sddm/themes/sddm
+sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/sddm
 ```
 
+_Note: If you run into "module is not installed" errors, ensure you are using `sddm-greeter-qt6` and have `qt6-5compat` and `qt6-declarative` installed._
+
 ## Credits
+
 - Inspired by **Nothing OS UI**.
 - Built for **Hyprland and KDE users**.
 
 ---
+
 **Contributions are welcome!** Feel free to fork and improve the theme.
