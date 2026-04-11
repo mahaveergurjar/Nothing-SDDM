@@ -2,7 +2,7 @@
 
 Ronin SDDM is a stunningly dark, samurai-inspired lock theme for **SDDM (Simple Desktop Display Manager)**. It features dynamic UI capabilities, layered frosted-glass aesthetics, interactive power/session switching, and a polished Demon Slayer color schematic tailored exclusively for modern desktops.
 
-![Ronin SDDM Preview](preview.png)
+![Ronin SDDM Preview](image.png)
 
 ## Features
 
