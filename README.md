@@ -1,40 +1,53 @@
-# My SDDM Themes
+# Ronin SDDM Theme
 
-A collection of custom themes for SDDM (Simple Desktop Display Manager), featuring designs inspired by Nothing OS and Google Pixel UI.
+Ronin SDDM is a stunningly dark, samurai-inspired lock theme for **SDDM (Simple Desktop Display Manager)**. It features dynamic UI capabilities, layered frosted-glass aesthetics, interactive power/session switching, and a polished Demon Slayer color schematic tailored exclusively for modern desktops.
 
-## Available Themes
+![Ronin SDDM Preview](preview.png)
 
-### 1, Noctalia SDDM Theme
+## Features
 
-Noctalia SDDM is a cozy, elegant login theme for **SDDM** , designed to complement the **Noctalia Shell** experience. It mimics the warm, dark aesthetic of the Rose Pine color palette, featuring rounded corners, smooth scaling, and a clean, modern interface tailored for Hyprland and KDE users.
-
-![Noctalia Theme Screenshot](https://raw.githubusercontent.com/mahaveergurjar/sddm/noctalia/Assets/preview.png)
-
-[**➡️ View "Noctalia" Theme Branch**](https://github.com/mahaveergurjar/sddm/tree/noctalia)
-
-### 2. Nothing OS Theme
-
-A minimalist, monochrome login theme inspired by the unique aesthetic of Nothing OS. It features dot-matrix typography and a clean, futuristic look.
-
-![Nothing Theme Screenshot](https://raw.githubusercontent.com/mahaveergurjar/sddm/nothing/image.png)
-
-[**➡️ View "Nothing" Theme Branch**](https://github.com/mahaveergurjar/sddm/tree/nothing)
-
----
-
-### 3. Pixel UI Theme
-
-A modern and vibrant theme based on the Android 16 Pixel UI design language. It brings the familiar, polished look of Pixel devices to your login screen.
-
-![Pixel Theme Screenshot](https://raw.githubusercontent.com/mahaveergurjar/sddm/pixel/image.png)
-
-[**➡️ View "Pixel" Theme Branch**](https://github.com/mahaveergurjar/sddm/tree/pixel)
+- **Interactive System Architecture** – Fully decoupled Session/Account dropdowns utilizing global system structures.
+- **Deep Glass Optics** – Natively styled frosted-glass UI layers powered by fast-rendering QT5 shaders.
+- **Dynamic Clock/Greeting** – Time-aware localized login greetings that actively parse chronological system logic.
+- **Thick Typographic Aesthetics** – Tightly locked JetBrains Nerd Font bounding boxes mimicking core Hyprlock setups natively.
 
 ## Installation
 
-To install a specific theme:
+1. Clone the repository:
+   ```sh
+   git clone -b ronin https://github.com/mahaveergurjar/sddm.git ronin-sddm
+   ```
+2. Move the theme to SDDM's theme directory:
+   ```sh
+   sudo mv ronin-sddm /usr/share/sddm/themes/ronin
+   ```
+3. Edit the sddm configuration to use the theme:
+   ```sh
+   sudo nano /etc/sddm.conf
+   ```
+   Add or modify the following:
+   ```ini
+   [Theme]
+   Current=ronin
+   ```
+4. Restart sddm:
+   ```sh
+   sudo systemctl restart sddm
+   ```
 
-1. Click the **View Branch** link for the theme you want.
-2. Clone that specific branch or download the files.
-3. Place the theme folder into your SDDM themes directory (usually `/usr/share/sddm/themes/`).
-4. Update your `/etc/sddm.conf` to apply the new theme.
+## Preview
+
+If you want to test the theme without restarting SDDM, run:
+
+```sh
+sddm-greeter --test-mode --theme /usr/share/sddm/themes/ronin
+```
+
+## Credits
+
+- Custom built for robust Multi-User/Wayland session switching natively.
+- Aesthetic styling sourced from modern hyper-dense interface architectures.
+
+---
+
+**Contributions are welcome!** Feel free to fork and improve the theme.
