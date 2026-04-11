@@ -1,0 +1,10 @@
+[SddmGreeterTheme]
+Name=Ronin
+Description=A custom theme based on a Demon Slayer Hyprlock configuration.
+Author=Antigravity
+Copyright=(c) 2026
+License=GPL
+Type=sddm-theme
+Version=0.1
+MainScript=Main.qml
+ConfigFile=theme.conf
